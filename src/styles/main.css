@@ -893,6 +893,16 @@ video.active {
     pointer-events: none;
 }
 
+/* Primary play button — accent color for clear focal point */
+.ctrl-btn.play-btn {
+    color: var(--accent);
+}
+
+.ctrl-btn.play-btn:hover {
+    background: rgba(255, 136, 0, 0.14);
+    color: var(--accent-light);
+}
+
 /* Time Display */
 .time-display {
     font-size: 12px;
