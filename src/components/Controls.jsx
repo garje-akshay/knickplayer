@@ -34,54 +34,80 @@ export default function Controls() {
   const bufferedPct = (player.buffered * 100) + '%';
   const volumePct = (Math.min(player.volume, 1) * 100) + '%';
 
-  // Seek bar handlers
-  const getSeekPct = useCallback((e) => {
+  // Seek bar handlers — Pointer Events (unifies mouse + touch + pen)
+  const getSeekPct = useCallback((clientX) => {
     const rect = seekTrackRef.current.getBoundingClientRect();
-    return Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
   }, []);
 
-  const handleSeekDown = useCallback((e) => {
+  const handleSeekPointerDown = useCallback((e) => {
+    if (!player.duration) return;
+    e.preventDefault();
+    const target = e.currentTarget;
+    try { target.setPointerCapture(e.pointerId); } catch {}
     seekDragging.current = true;
-    const pct = getSeekPct(e);
+    const pct = getSeekPct(e.clientX);
     player.seekPercent(pct);
-    const onMove = (e) => {
-      if (!seekDragging.current) return;
-      const p = getSeekPct(e);
-      player.seekPercent(p);
-    };
-    const onUp = () => { seekDragging.current = false; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
+    const rect = seekTrackRef.current.getBoundingClientRect();
+    const t = player.duration * pct;
+    setTooltipPos({ visible: true, x: e.clientX - rect.left, text: formatTime(t), time: t });
   }, [player, getSeekPct]);
 
-  const handleSeekHover = useCallback((e) => {
+  const handleSeekPointerMove = useCallback((e) => {
     if (!player.duration) return;
     const rect = seekTrackRef.current.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const t = player.duration * pct;
     setTooltipPos({ visible: true, x: e.clientX - rect.left, text: formatTime(t), time: t });
-  }, [player.duration]);
+    if (seekDragging.current) {
+      player.seekPercent(pct);
+    }
+  }, [player]);
 
-  const handleSeekLeave = useCallback(() => { setTooltipPos(p => ({ ...p, visible: false })); }, []);
+  const handleSeekPointerUp = useCallback((e) => {
+    if (seekDragging.current) {
+      seekDragging.current = false;
+      try { e.currentTarget.releasePointerCapture(e.pointerId); } catch {}
+    }
+    // Hide tooltip on touch/pen release; keep for mouse hover
+    if (e.pointerType !== 'mouse') {
+      setTooltipPos(p => ({ ...p, visible: false }));
+    }
+  }, []);
+
+  const handleSeekPointerLeave = useCallback((e) => {
+    if (!seekDragging.current && e.pointerType === 'mouse') {
+      setTooltipPos(p => ({ ...p, visible: false }));
+    }
+  }, []);
 
   const hoverThumb = tooltipPos.visible && thumbnails ? thumbnails.getThumbAt?.(tooltipPos.time) : null;
   const thumbsLoading = thumbnails?.isGenerating;
   const thumbsProgress = thumbnails?.progress || 0;
 
-  // Volume handlers
-  const getVolPct = useCallback((e) => {
+  // Volume handlers — Pointer Events
+  const getVolPct = useCallback((clientX) => {
     const rect = volTrackRef.current.getBoundingClientRect();
-    return Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
   }, []);
 
-  const handleVolDown = useCallback((e) => {
+  const handleVolPointerDown = useCallback((e) => {
+    e.preventDefault();
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
     volDragging.current = true;
-    player.setVolume(getVolPct(e));
-    const onMove = (e) => { if (volDragging.current) player.setVolume(getVolPct(e)); };
-    const onUp = () => { volDragging.current = false; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
+    player.setVolume(getVolPct(e.clientX));
   }, [player, getVolPct]);
+
+  const handleVolPointerMove = useCallback((e) => {
+    if (volDragging.current) player.setVolume(getVolPct(e.clientX));
+  }, [player, getVolPct]);
+
+  const handleVolPointerUp = useCallback((e) => {
+    if (volDragging.current) {
+      volDragging.current = false;
+      try { e.currentTarget.releasePointerCapture(e.pointerId); } catch {}
+    }
+  }, []);
 
   const handleVolWheel = useCallback((e) => {
     e.preventDefault();
@@ -103,7 +129,14 @@ export default function Controls() {
   return (
     <div className="controls-area">
       {/* Seek Bar */}
-      <div className="seek-bar-container" onMouseDown={handleSeekDown} onMouseMove={handleSeekHover} onMouseLeave={handleSeekLeave}>
+      <div
+        className="seek-bar-container"
+        onPointerDown={handleSeekPointerDown}
+        onPointerMove={handleSeekPointerMove}
+        onPointerUp={handleSeekPointerUp}
+        onPointerCancel={handleSeekPointerUp}
+        onPointerLeave={handleSeekPointerLeave}
+      >
         <div className="seek-bar-track" ref={seekTrackRef}>
           <div className="seek-bar-buffered" style={{ width: bufferedPct }} />
           <div className="seek-bar-progress" style={{ width: progressPct }} />
@@ -237,7 +270,14 @@ export default function Controls() {
             </svg>
           </button>
           <div className="volume-slider-container" onWheel={handleVolWheel}>
-            <div className="volume-slider-track" ref={volTrackRef} onMouseDown={handleVolDown}>
+            <div
+              className="volume-slider-track"
+              ref={volTrackRef}
+              onPointerDown={handleVolPointerDown}
+              onPointerMove={handleVolPointerMove}
+              onPointerUp={handleVolPointerUp}
+              onPointerCancel={handleVolPointerUp}
+            >
               <div className="volume-slider-fill" style={{ width: volumePct }} />
               <div className="volume-slider-thumb" style={{ left: volumePct }} />
             </div>

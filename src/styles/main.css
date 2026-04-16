@@ -782,6 +782,9 @@ video.active {
     height: 24px;
     padding: 8px 16px;
     cursor: pointer;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .seek-bar-track {
@@ -1098,6 +1101,7 @@ video.active {
     background: rgba(255, 255, 255, 0.08);
     border-radius: 3px;
     cursor: pointer;
+    touch-action: none;
 }
 
 .volume-slider-fill {
