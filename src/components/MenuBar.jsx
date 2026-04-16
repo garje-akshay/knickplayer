@@ -105,21 +105,29 @@ export default function MenuBar({ onAction }) {
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const barRef = useRef(null);
+  const overlayRef = useRef(null);
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (barRef.current && !barRef.current.contains(e.target)) {
+      const inBar = barRef.current && barRef.current.contains(e.target);
+      const inOverlay = overlayRef.current && overlayRef.current.contains(e.target);
+      if (!inBar && !inOverlay) {
         setActiveMenu(null);
         setMobileMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClick);
-    document.addEventListener('touchstart', handleClick);
     return () => {
       document.removeEventListener('mousedown', handleClick);
-      document.removeEventListener('touchstart', handleClick);
     };
   }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [mobileMenuOpen]);
 
   const handleMenuClick = (key) => {
     setActiveMenu(prev => (prev === key ? null : key));
@@ -175,8 +183,12 @@ export default function MenuBar({ onAction }) {
         </button>
       </div>
 
-      <div className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`}>
-        <div className="mobile-menu-panel">
+      <div
+        className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`}
+        ref={overlayRef}
+        onClick={(e) => { if (e.target === e.currentTarget) setMobileMenuOpen(false); }}
+      >
+        <div className="mobile-menu-panel" onClick={(e) => e.stopPropagation()}>
           <div className="mobile-menu-header">
             <span>Menu</span>
             <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
