@@ -200,24 +200,40 @@ body {
     inset: 0;
     background: rgba(0, 0, 0, 0.76);
     display: none;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     z-index: 2000;
-    padding: 18px;
+    padding: 0;
+    padding-top: max(24px, var(--safe-top));
 }
 
 .mobile-menu-overlay.open {
     display: flex;
+    animation: kpFadeIn 0.2s ease;
 }
 
 .mobile-menu-panel {
     width: 100%;
-    max-width: 560px;
+    max-width: 720px;
+    max-height: calc(100vh - max(24px, var(--safe-top)));
     background: var(--bg-surface);
     border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     box-shadow: var(--shadow-lg);
+    animation: kpSlideUp 0.25s ease;
+}
+
+@keyframes kpFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes kpSlideUp {
+    from { transform: translateY(24px); opacity: 0.5; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .mobile-menu-header {
@@ -230,6 +246,23 @@ body {
     font-size: 14px;
     color: var(--text-primary);
     font-weight: 600;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.mobile-menu-panel {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.mobile-menu-panel .mobile-menu-section:first-of-type {
+    padding-top: 8px;
+}
+
+.mobile-menu-panel .mobile-menu-section:last-of-type {
+    padding-bottom: calc(16px + var(--safe-bottom));
 }
 
 .mobile-menu-close {
@@ -291,7 +324,7 @@ body {
     margin: 10px 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
     .menu-main {
         display: none;
     }
@@ -300,10 +333,14 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
+        min-width: 44px;
+        height: 44px;
+        font-size: 22px;
     }
 
     .menu-bar {
         padding: 0 10px;
+        justify-content: space-between;
     }
 
     .menu-item {
