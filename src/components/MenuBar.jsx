@@ -103,16 +103,22 @@ const MENUS = {
 
 export default function MenuBar({ onAction }) {
   const [activeMenu, setActiveMenu] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const barRef = useRef(null);
 
   useEffect(() => {
     const handleClick = (e) => {
       if (barRef.current && !barRef.current.contains(e.target)) {
         setActiveMenu(null);
+        setMobileMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('touchstart', handleClick);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('touchstart', handleClick);
+    };
   }, []);
 
   const handleMenuClick = (key) => {
@@ -125,41 +131,79 @@ export default function MenuBar({ onAction }) {
 
   const handleAction = (action) => {
     setActiveMenu(null);
+    setMobileMenuOpen(false);
     onAction(action);
   };
 
   return (
-    <div className="menu-bar" ref={barRef}>
-      {Object.entries(MENUS).map(([key, menu]) => (
-        <div
-          key={key}
-          className={`menu-item${activeMenu === key ? ' active' : ''}`}
-          onMouseDown={() => handleMenuClick(key)}
-          onMouseEnter={() => handleMenuEnter(key)}
-        >
-          <span className="menu-label">{menu.label}</span>
-          {activeMenu === key && (
-            <div className="menu-dropdown" onMouseDown={(e) => e.stopPropagation()}>
+    <>
+      <div className="menu-bar" ref={barRef}>
+        <div className="menu-main">
+          {Object.entries(MENUS).map(([key, menu]) => (
+            <div
+              key={key}
+              className={`menu-item${activeMenu === key ? ' active' : ''}`}
+              onClick={() => handleMenuClick(key)}
+              onMouseEnter={() => handleMenuEnter(key)}
+            >
+              <span className="menu-label">{menu.label}</span>
+              {activeMenu === key && (
+                <div className="menu-dropdown" onClick={(e) => e.stopPropagation()}>
+                  {menu.items.map((item, i) =>
+                    item === 'separator' ? (
+                      <div key={i} className="menu-separator" />
+                    ) : (
+                      <div
+                        key={item.action}
+                        className={`menu-entry${item.checkable ? ' checkable' : ''}${item.defaultChecked ? ' checked' : ''}`}
+                        onClick={() => handleAction(item.action)}
+                      >
+                        <span>{item.label}</span>
+                        {item.shortcut && <span className="shortcut">{item.shortcut}</span>}
+                        {item.arrow && <span className="arrow">&#9654;</span>}
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <button className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(open => !open)} aria-label="Open menu">
+          <span>☰</span>
+        </button>
+      </div>
+
+      <div className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`}>
+        <div className="mobile-menu-panel">
+          <div className="mobile-menu-header">
+            <span>Menu</span>
+            <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
+              ✕
+            </button>
+          </div>
+          {Object.entries(MENUS).map(([key, menu]) => (
+            <div key={key} className="mobile-menu-section">
+              <div className="mobile-menu-section-title">{menu.label}</div>
               {menu.items.map((item, i) =>
                 item === 'separator' ? (
-                  <div key={i} className="menu-separator" />
+                  <div key={i} className="mobile-menu-separator" />
                 ) : (
-                  <div
+                  <button
                     key={item.action}
-                    className={`menu-entry${item.checkable ? ' checkable' : ''}${item.defaultChecked ? ' checked' : ''}`}
-                    onMouseDown={(e) => e.stopPropagation()}
+                    className="mobile-menu-item"
                     onClick={() => handleAction(item.action)}
                   >
                     <span>{item.label}</span>
-                    {item.shortcut && <span className="shortcut">{item.shortcut}</span>}
-                    {item.arrow && <span className="arrow">&#9654;</span>}
-                  </div>
+                    {item.shortcut && <span className="mobile-menu-shortcut">{item.shortcut}</span>}
+                  </button>
                 )
               )}
             </div>
-          )}
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 }
