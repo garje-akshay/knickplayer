@@ -11,33 +11,40 @@
 }
 
 :root {
-    --bg-primary: #0f0f1a;
-    --bg-secondary: #161625;
-    --bg-surface: #1e1e32;
-    --bg-elevated: #252540;
-    --bg-glass: rgba(30, 30, 50, 0.95);
-    --bg-glass-hover: rgba(40, 40, 65, 0.95);
+    /* VLC classic: charcoal base + traffic-cone orange accent */
+    --bg-primary: #1b1b1b;
+    --bg-secondary: #232323;
+    --bg-surface: #2a2a2a;
+    --bg-elevated: #333333;
+    --bg-glass: rgba(35, 35, 35, 0.95);
+    --bg-glass-hover: rgba(48, 48, 48, 0.95);
     --border: rgba(255, 255, 255, 0.08);
-    --border-light: rgba(255, 255, 255, 0.12);
-    --border-focus: rgba(108, 92, 231, 0.5);
-    --text-primary: #eaeaf0;
-    --text-secondary: #9898b0;
-    --text-muted: #6a6a85;
-    --accent: #6C5CE7;
-    --accent-light: #8B7FF0;
-    --accent-glow: rgba(108, 92, 231, 0.3);
-    --accent2: #00CEFF;
-    --accent-gradient: linear-gradient(135deg, #6C5CE7, #00CEFF);
-    --accent-gradient-hover: linear-gradient(135deg, #8B7FF0, #33D6FF);
-    --seek-gradient: linear-gradient(to right, #6C5CE7, #00CEFF);
-    --danger: #FF4757;
-    --success: #2ED573;
-    --radius: 8px;
-    --radius-sm: 4px;
-    --radius-lg: 12px;
-    --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
-    --transition: all 0.2s ease;
+    --border-light: rgba(255, 255, 255, 0.14);
+    --border-focus: rgba(255, 136, 0, 0.55);
+    --text-primary: #f1f1f1;
+    --text-secondary: #b8b8b8;
+    --text-muted: #7a7a7a;
+    --accent: #FF8800;
+    --accent-light: #FFA33D;
+    --accent-dark: #E67300;
+    --accent-glow: rgba(255, 136, 0, 0.35);
+    --accent2: #FF8800;
+    --accent-gradient: linear-gradient(135deg, #FF8800, #FFA33D);
+    --accent-gradient-hover: linear-gradient(135deg, #FFA33D, #FFBB66);
+    --seek-gradient: linear-gradient(to right, #FF8800, #FFA33D);
+    --danger: #E74C3C;
+    --success: #2ECC71;
+    --radius: 6px;
+    --radius-sm: 3px;
+    --radius-lg: 10px;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.6);
+    --transition: all 0.18s ease;
+    --touch-target: 44px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
 }
 
 body {
@@ -536,7 +543,7 @@ video.active {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(108, 92, 231, 0.15);
+    background: rgba(255, 136, 0, 0.12);
     border: 2px dashed var(--accent);
     display: flex;
     align-items: center;
@@ -705,9 +712,9 @@ video.active {
 
 .playlist-mode-btn.active {
     opacity: 1;
-    color: var(--accent2);
-    background: rgba(0, 206, 255, 0.1);
-    border-color: rgba(0, 206, 255, 0.3);
+    color: var(--accent);
+    background: rgba(255, 136, 0, 0.12);
+    border-color: rgba(255, 136, 0, 0.35);
 }
 
 /* ===== Controls Area ===== */
@@ -765,12 +772,12 @@ video.active {
     left: 0%;
     width: 14px;
     height: 14px;
-    background: var(--accent2);
+    background: var(--accent);
     border: 2px solid #fff;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     z-index: 3;
-    box-shadow: 0 0 8px rgba(0, 206, 255, 0.4);
+    box-shadow: 0 0 8px var(--accent-glow);
     display: none;
     transition: transform 0.1s ease;
 }
@@ -959,11 +966,11 @@ video.active {
     left: 80%;
     width: 12px;
     height: 12px;
-    background: var(--accent2);
+    background: var(--accent);
     border: 2px solid #fff;
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 6px rgba(0, 206, 255, 0.3);
+    box-shadow: 0 0 6px var(--accent-glow);
     cursor: pointer;
 }
 
@@ -1125,15 +1132,27 @@ video.active {
     cursor: pointer;
 }
 
-/* Responsive adjustments */
+/* ==========================================================
+   Responsive / Mobile-first polish
+   Breakpoints: tablet (≤900px), phone (≤640px), small (≤420px)
+   Principles: 44px min touch targets, stack layouts, safe-area
+   insets, larger seek bar for thumb control, hidden-but-present
+   keyboard-only affordances swapped for touch equivalents.
+   ========================================================== */
+
 @media (max-width: 900px) {
+    .kp-app {
+        padding-left: var(--safe-left);
+        padding-right: var(--safe-right);
+    }
+
     .main-content {
         flex-direction: column;
     }
 
     .video-area {
-        min-height: 42vh;
-        max-height: 55vh;
+        min-height: 40vh;
+        max-height: 60vh;
     }
 
     .playlist-panel {
@@ -1141,11 +1160,11 @@ video.active {
         border-left: none;
         border-top: 1px solid var(--border);
         order: 2;
-        max-height: 260px;
+        max-height: 40vh;
     }
 
     .playlist-content {
-        max-height: calc(260px - 104px);
+        max-height: calc(40vh - 108px);
     }
 
     .control-buttons {
@@ -1169,20 +1188,45 @@ video.active {
     }
 
     .seek-bar-container {
-        padding: 8px 10px;
+        padding: 10px 14px;
+        height: 32px;
+    }
+
+    .seek-bar-track {
+        height: 6px;
+    }
+
+    .seek-bar-container:hover .seek-bar-track {
+        height: 8px;
     }
 
     .subtitle-display {
-        font-size: 16px;
-        bottom: 98px;
+        font-size: 17px;
+        bottom: calc(108px + var(--safe-bottom));
         max-width: 94%;
     }
 }
 
+/* === Phone layout === */
 @media (max-width: 640px) {
-    .title-bar,
+    body {
+        font-size: 14px;
+    }
+
+    .title-bar {
+        height: 32px;
+        padding: 0 10px;
+        padding-top: var(--safe-top);
+        height: calc(32px + var(--safe-top));
+    }
+
+    .title-bar-text {
+        font-size: 11px;
+    }
+
     .menu-bar {
         padding: 0 6px;
+        height: 44px;
     }
 
     .menu-label {
@@ -1190,8 +1234,138 @@ video.active {
     }
 
     .video-area {
-        min-height: 38vh;
+        min-height: 42vh;
+        max-height: 58vh;
+    }
+
+    /* Larger seek area for thumb accuracy */
+    .seek-bar-container {
+        padding: 14px 12px;
+        height: 40px;
+    }
+
+    .seek-bar-track {
+        height: 6px;
+    }
+
+    .seek-bar-thumb {
+        display: block;
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Control buttons become proper touch targets */
+    .control-buttons {
+        gap: 4px;
+        padding: 6px 8px 10px;
+    }
+
+    .ctrl-btn {
+        min-width: var(--touch-target);
+        height: var(--touch-target);
+        width: auto;
+        padding: 0 6px;
+    }
+
+    .ctrl-btn svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    /* Hide secondary controls on phone to prioritize play/prev/next/volume/fullscreen */
+    .speed-control,
+    #abLoopBtn,
+    #prevFrameBtn,
+    #nextFrameBtn,
+    #snapshotBtn,
+    #pipBtn {
+        display: none;
+    }
+
+    .volume-slider-container {
+        width: 80px;
+    }
+
+    .time-display {
+        font-size: 12px;
+        padding: 0 4px;
+    }
+
+    /* Playlist: sheet-like feel */
+    .playlist-panel {
         max-height: 48vh;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .playlist-header {
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+
+    .playlist-btn,
+    .playlist-mode-btn {
+        min-width: 38px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .playlist-item {
+        padding: 12px 14px;
+        font-size: 13px;
+        min-height: 48px;
+    }
+
+    .playlist-item .pl-name {
+        font-size: 13px;
+    }
+
+    .status-bar {
+        font-size: 10px;
+        padding: 0 10px;
+        padding-bottom: var(--safe-bottom);
+        height: calc(28px + var(--safe-bottom));
+    }
+
+    /* Drag overlay text smaller on phone */
+    .drag-text {
+        font-size: 16px;
+        padding: 0 16px;
+        text-align: center;
+    }
+
+    /* Zoom indicator out of the way */
+    .zoom-indicator {
+        top: 8px;
+        right: 8px;
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+}
+
+/* === Small phones === */
+@media (max-width: 420px) {
+    .title-bar-text {
+        max-width: 60vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .video-area {
+        min-height: 38vh;
+    }
+
+    .volume-slider-container {
+        display: none;
+    }
+
+    .ctrl-btn {
+        min-width: 40px;
+        height: 40px;
+    }
+
+    .time-display {
+        font-size: 11px;
     }
 
     .playlist-header,
@@ -1199,33 +1373,57 @@ video.active {
     .playlist-item,
     .seek-bar-container,
     .control-buttons {
-        padding-left: 8px;
-        padding-right: 8px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
-    .playlist-btn,
-    .playlist-mode-btn,
-    .ctrl-btn {
-        width: 30px;
-        height: 28px;
-        font-size: 12px;
+    .subtitle-display {
+        font-size: 15px;
+        bottom: calc(116px + var(--safe-bottom));
     }
+}
 
-    .volume-slider-container {
-        width: 72px;
-    }
-
-    .speed-control {
+/* === Landscape phone: reclaim video room === */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+    .title-bar {
         display: none;
     }
 
-    .time-display {
-        font-size: 11px;
+    .menu-bar {
+        height: 40px;
     }
 
+    .video-area {
+        min-height: 60vh;
+        max-height: 100vh;
+    }
+
+    .playlist-panel.hidden ~ * .status-bar,
     .status-bar {
-        font-size: 10px;
-        padding: 0 10px;
+        display: none;
+    }
+}
+
+/* === Touch-first affordances (any pointer is coarse) === */
+@media (hover: none) and (pointer: coarse) {
+    /* Always show seek thumb so it's draggable without hover */
+    .seek-bar-thumb {
+        display: block;
+    }
+
+    /* Always show viz controls on touch */
+    .viz-controls {
+        opacity: 1;
+    }
+
+    /* Disable 'hover grow' on buttons that rely on hover states */
+    .ctrl-btn:active {
+        background: var(--bg-glass-hover);
+    }
+
+    /* Kill iOS tap highlight */
+    * {
+        -webkit-tap-highlight-color: transparent;
     }
 }
 
@@ -1256,7 +1454,7 @@ video.active {
 
 .kp-loader-icon {
     animation: kpPulse 1.5s ease-in-out infinite;
-    filter: drop-shadow(0 0 12px rgba(108, 92, 231, 0.5));
+    filter: drop-shadow(0 0 12px var(--accent-glow));
 }
 
 .kp-loader-ring {

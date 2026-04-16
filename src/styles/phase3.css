@@ -73,7 +73,7 @@
 
 .transcode-preset.active {
     border-color: var(--accent);
-    background: rgba(108, 92, 231, 0.1);
+    background: rgba(255, 136, 0, 0.12);
 }
 
 .transcode-preset input[type="radio"] {
@@ -186,7 +186,7 @@
 .capture-source-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
-    background: rgba(108, 92, 231, 0.05);
+    background: rgba(255, 136, 0, 0.08);
 }
 
 .capture-settings {
@@ -452,7 +452,7 @@
 
 .stream-quality-option.active {
     border-color: var(--accent);
-    background: rgba(108, 92, 231, 0.1);
+    background: rgba(255, 136, 0, 0.12);
 }
 
 .stream-quality-option input[type="radio"] {
