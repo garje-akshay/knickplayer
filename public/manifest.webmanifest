@@ -1,0 +1,28 @@
+{
+  "name": "KnickPlayer — Free Online Video & Audio Player",
+  "short_name": "KnickPlayer",
+  "description": "Play any video or audio file in your browser. 50+ formats supported. Free, private, no uploads.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#0f0f1a",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["entertainment", "utilities"]
+}

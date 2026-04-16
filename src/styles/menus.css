@@ -1,0 +1,69 @@
+/* KnickPlayer — Menu Specific Styles (Modern Dark) */
+
+.menu-dropdown {
+    font-size: 12px;
+}
+
+/* Submenu support */
+.menu-entry.has-submenu {
+    position: relative;
+}
+
+.menu-entry.has-submenu .submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -4px;
+    min-width: 200px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-lg);
+    z-index: 1001;
+    padding: 4px;
+    border-radius: var(--radius);
+}
+
+.menu-entry.has-submenu:hover .submenu {
+    display: block;
+}
+
+/* Recent media submenu */
+.recent-media-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.recent-empty {
+    padding: 6px 16px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Radio button menu items */
+.menu-entry.radio::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+}
+
+.menu-entry.radio.selected::before {
+    content: '●';
+    position: absolute;
+    left: 10px;
+    font-size: 10px;
+    color: var(--accent2);
+}
+
+/* Speed submenu */
+.speed-submenu .menu-entry {
+    font-weight: 500;
+    font-size: 12px;
+}
+
+/* Aspect ratio submenu items */
+.aspect-submenu .menu-entry.active::before {
+    content: '✓';
+    position: absolute;
+    left: 10px;
+    color: var(--accent2);
+}

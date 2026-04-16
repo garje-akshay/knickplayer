@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f0f1a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6C5CE7"/>
+      <stop offset="100%" stop-color="#00CEFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="620" width="1200" height="10" fill="url(#accent)"/>
+  <circle cx="320" cy="280" r="100" fill="url(#accent)" opacity="0.9"/>
+  <polygon points="295,220 295,340 400,280" fill="white"/>
+  <text x="480" y="260" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="700" fill="white">KnickPlayer</text>
+  <text x="480" y="320" font-family="system-ui,-apple-system,sans-serif" font-size="28" fill="#aaa">Free Online Video &amp; Audio Player</text>
+  <text x="480" y="380" font-family="system-ui,-apple-system,sans-serif" font-size="22" fill="#666">Play 50+ formats in your browser · No uploads · 100% private</text>
+  <text x="480" y="440" font-family="system-ui,-apple-system,sans-serif" font-size="18" fill="#6C5CE7">knicklab.com</text>
+</svg>
