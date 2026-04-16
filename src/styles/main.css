@@ -840,7 +840,7 @@ video.active {
 
 .seek-tooltip {
     position: absolute;
-    top: -28px;
+    bottom: calc(100% + 6px);
     background: var(--bg-elevated);
     color: var(--text-primary);
     padding: 3px 8px;
@@ -852,10 +852,98 @@ video.active {
     z-index: 10;
     border: 1px solid var(--border-light);
     font-weight: 500;
+    box-shadow: var(--shadow);
 }
 
 .seek-tooltip.hidden {
     display: none;
+}
+
+/* With thumbnail preview */
+.seek-tooltip.with-thumb,
+.seek-tooltip:has(.seek-thumb-loading) {
+    padding: 4px;
+    background: var(--bg-elevated);
+}
+
+.seek-thumb-img {
+    display: block;
+    width: 160px;
+    height: 90px;
+    border-radius: 3px;
+    object-fit: cover;
+    background: #000;
+}
+
+.seek-thumb-loading {
+    width: 160px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 3px;
+}
+
+.seek-thumb-spinner {
+    width: 22px;
+    height: 22px;
+    border: 2px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent);
+    border-radius: 50%;
+    animation: kpSpin 0.9s linear infinite;
+}
+
+.seek-thumb-loading-text {
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.seek-tooltip-time {
+    text-align: center;
+    padding-top: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.seek-tooltip:not(.with-thumb):not(:has(.seek-thumb-loading)) .seek-tooltip-time {
+    padding-top: 0;
+}
+
+/* Indicator below the seek bar while thumbnails are generating */
+.seek-thumbs-indicator {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 2px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 2px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.seek-thumbs-indicator-bar {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 6px var(--accent-glow);
+}
+
+@media (max-width: 640px) {
+    .seek-thumb-img,
+    .seek-thumb-loading {
+        width: 128px;
+        height: 72px;
+    }
 }
 
 /* Control Buttons */

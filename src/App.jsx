@@ -7,6 +7,7 @@ import useScreenCapture from './hooks/useScreenCapture';
 import useMediaLibrary from './hooks/useMediaLibrary';
 import useStreamPlayer from './hooks/useStreamPlayer';
 import usePlugins from './hooks/usePlugins';
+import useThumbnails from './hooks/useThumbnails';
 import TitleBar from './components/TitleBar';
 import MenuBar from './components/MenuBar';
 import VideoArea from './components/VideoArea';
@@ -31,6 +32,7 @@ export default function App() {
   const library = useMediaLibrary();
   const stream = useStreamPlayer();
   const plugins = usePlugins();
+  const thumbnails = useThumbnails();
   // Connect stream player to usePlayer's loadUrl
   useEffect(() => {
     player.streamAttachRef.current = stream.attachStream;
@@ -111,6 +113,24 @@ export default function App() {
       playlist.updateDuration(playlist.currentIndex, player.duration);
     }
   }, [player.duration, playlist.currentIndex, playlist]);
+
+  // Trigger thumbnail pre-extraction for video files (not audio, not streams)
+  useEffect(() => {
+    const v = player.videoRef.current;
+    if (!v) return;
+    if (player.mediaType !== 'video') { thumbnails.reset(); return; }
+    if (!player.mediaInfo) { thumbnails.reset(); return; }
+    if (!isFinite(player.duration) || player.duration <= 0) return;
+    const src = v.currentSrc || v.src;
+    if (!src || src.startsWith('blob:') === false && src.startsWith('http') === false && src.startsWith('file:') === false) {
+      // unknown src type — skip
+      return;
+    }
+    // Kick off in background once duration is stable
+    const key = `${src}|${player.duration}`;
+    const id = setTimeout(() => thumbnails.generate(src, key), 400);
+    return () => clearTimeout(id);
+  }, [player.mediaInfo, player.mediaType, player.duration]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     // Don't show native player errors while FFmpeg fallback is in progress
@@ -401,7 +421,7 @@ export default function App() {
   }, [player, toggleFullscreen, stream]);
 
   // Context provider value
-  const ctxValue = { player, playlist, ffmpeg, stream, library, transcodingFile };
+  const ctxValue = { player, playlist, ffmpeg, stream, library, transcodingFile, thumbnails };
 
   return (
     <PlayerContext.Provider value={ctxValue}>

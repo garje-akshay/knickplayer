@@ -3,14 +3,14 @@ import { usePlayerContext } from '../hooks/PlayerContext';
 import { formatTime, SPEEDS } from '../utils/helpers';
 
 export default function Controls() {
-  const { player, playlist } = usePlayerContext();
+  const { player, playlist, thumbnails } = usePlayerContext();
   const [speedOpen, setSpeedOpen] = useState(false);
   const seekDragging = useRef(false);
   const volDragging = useRef(false);
   const seekTrackRef = useRef(null);
   const volTrackRef = useRef(null);
   const speedRef = useRef(null);
-  const [tooltipPos, setTooltipPos] = useState({ visible: false, x: 0, text: '' });
+  const [tooltipPos, setTooltipPos] = useState({ visible: false, x: 0, text: '', time: 0 });
 
   // Close speed popup on outside click or Escape
   useEffect(() => {
@@ -58,10 +58,15 @@ export default function Controls() {
     if (!player.duration) return;
     const rect = seekTrackRef.current.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    setTooltipPos({ visible: true, x: e.clientX - rect.left, text: formatTime(player.duration * pct) });
+    const t = player.duration * pct;
+    setTooltipPos({ visible: true, x: e.clientX - rect.left, text: formatTime(t), time: t });
   }, [player.duration]);
 
   const handleSeekLeave = useCallback(() => { setTooltipPos(p => ({ ...p, visible: false })); }, []);
+
+  const hoverThumb = tooltipPos.visible && thumbnails ? thumbnails.getThumbAt?.(tooltipPos.time) : null;
+  const thumbsLoading = thumbnails?.isGenerating;
+  const thumbsProgress = thumbnails?.progress || 0;
 
   // Volume handlers
   const getVolPct = useCallback((e) => {
@@ -105,7 +110,22 @@ export default function Controls() {
           <div className="seek-bar-thumb" style={{ left: progressPct, display: 'block' }} />
         </div>
         {tooltipPos.visible && (
-          <div className="seek-tooltip" style={{ left: tooltipPos.x }}>{tooltipPos.text}</div>
+          <div className={`seek-tooltip${hoverThumb ? ' with-thumb' : ''}`} style={{ left: tooltipPos.x }}>
+            {hoverThumb ? (
+              <img className="seek-thumb-img" src={hoverThumb} alt="" />
+            ) : thumbsLoading ? (
+              <div className="seek-thumb-loading">
+                <div className="seek-thumb-spinner" />
+                <div className="seek-thumb-loading-text">{Math.round(thumbsProgress * 100)}%</div>
+              </div>
+            ) : null}
+            <div className="seek-tooltip-time">{tooltipPos.text}</div>
+          </div>
+        )}
+        {thumbsLoading && (
+          <div className="seek-thumbs-indicator" title={`Generating thumbnails — ${Math.round(thumbsProgress * 100)}%`}>
+            <div className="seek-thumbs-indicator-bar" style={{ width: `${thumbsProgress * 100}%` }} />
+          </div>
         )}
       </div>
 
