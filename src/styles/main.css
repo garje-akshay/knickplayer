@@ -1212,7 +1212,14 @@ video.active {
         flex-direction: column;
     }
 
+    /* Video fills whatever the playlist/controls leave — no artificial cap */
     .video-area {
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* Only cap video height when playlist is actually visible beside/below it */
+    .main-content:has(.playlist-panel:not(.hidden)) .video-area {
         min-height: 40vh;
         max-height: 60vh;
     }
@@ -1293,11 +1300,6 @@ video.active {
 
     .menu-label {
         font-size: 11px;
-    }
-
-    .video-area {
-        min-height: 42vh;
-        max-height: 58vh;
     }
 
     /* Larger seek area for thumb accuracy */
@@ -1411,10 +1413,6 @@ video.active {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-
-    .video-area {
-        min-height: 38vh;
     }
 
     .volume-slider-container {
