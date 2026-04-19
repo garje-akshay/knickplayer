@@ -550,3 +550,127 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
+
+/* ===== Mobile / Responsive ===== */
+@media (max-width: 900px) {
+    /* Transcode */
+    .transcode-presets {
+        grid-template-columns: 1fr;
+    }
+    .transcode-preset {
+        padding: 14px;
+        min-height: 48px;
+    }
+    .transcode-preset-label {
+        font-size: 13px;
+    }
+    .transcode-source {
+        flex-wrap: wrap;
+    }
+    .transcode-file-info {
+        min-height: 44px;
+        flex: 1 1 100%;
+    }
+    .transcode-log {
+        max-height: 140px;
+        font-size: 11px;
+    }
+
+    /* Screen Capture */
+    .capture-sources {
+        flex-direction: column;
+        gap: 12px;
+        padding: 10px 0;
+    }
+    .capture-source-btn {
+        padding: 18px 20px;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        min-height: 56px;
+        font-size: 14px;
+    }
+    .capture-preview-container,
+    .capture-preview {
+        max-height: 220px;
+    }
+    .capture-recording-info {
+        flex-wrap: wrap;
+    }
+    .capture-duration {
+        font-size: 22px;
+    }
+    .capture-controls {
+        flex-wrap: wrap;
+    }
+    .capture-result-info {
+        flex-wrap: wrap;
+        gap: 6px 16px;
+    }
+
+    /* Media Library */
+    .library-toolbar {
+        flex-wrap: wrap;
+    }
+    .library-search {
+        flex: 1 1 100%;
+    }
+    .library-list {
+        max-height: 60dvh;
+    }
+    .library-item {
+        padding: 12px;
+        gap: 10px;
+    }
+    .library-thumb {
+        width: 56px;
+        height: 32px;
+    }
+    .library-item-name {
+        font-size: 13px;
+    }
+    .library-item-delete {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    /* Stream Quality */
+    .stream-quality-option {
+        padding: 12px;
+        min-height: 48px;
+        font-size: 13px;
+        flex-wrap: wrap;
+    }
+    .stream-quality-bitrate,
+    .stream-quality-res {
+        font-size: 11px;
+    }
+
+    /* Plugin Manager */
+    .plugin-list {
+        max-height: 60dvh;
+    }
+    .plugin-item {
+        flex-wrap: wrap;
+        padding: 14px;
+        gap: 10px;
+    }
+    .plugin-info {
+        flex: 1 1 100%;
+    }
+    .plugin-name {
+        font-size: 14px;
+    }
+    .plugin-desc {
+        font-size: 12px;
+    }
+    .plugin-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .plugin-toggle {
+        font-size: 13px;
+        min-height: 32px;
+    }
+}

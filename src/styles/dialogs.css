@@ -596,3 +596,217 @@
     font-size: 11px;
     color: var(--text-muted);
 }
+
+/* ===== Mobile / Responsive ===== */
+@media (max-width: 900px) {
+    .dialog-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .dialog {
+        min-width: 0;
+        width: 100vw;
+        max-width: 100vw;
+        max-height: 92dvh;
+        border-radius: 14px 14px 0 0;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .dialog.wide {
+        min-width: 0;
+        width: 100vw;
+    }
+
+    .dialog-titlebar {
+        padding: 14px 16px;
+        font-size: 15px;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+
+    .dialog-close {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .dialog-body {
+        padding: 16px;
+    }
+
+    .dialog-footer {
+        padding: 12px 16px;
+        position: sticky;
+        bottom: 0;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .dialog-btn {
+        min-height: 44px;
+        min-width: 96px;
+        font-size: 14px;
+        padding: 10px 18px;
+        flex: 1 1 auto;
+    }
+
+    .dialog-input,
+    .dialog-select {
+        font-size: 16px;
+        padding: 12px 14px;
+        min-height: 44px;
+    }
+
+    .dialog-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        scrollbar-width: none;
+    }
+    .dialog-tabs::-webkit-scrollbar { display: none; }
+
+    .dialog-tab {
+        padding: 12px 16px;
+        font-size: 13px;
+        flex-shrink: 0;
+        min-height: 44px;
+    }
+
+    /* Info grid stacks */
+    .info-row {
+        flex-direction: column;
+        gap: 2px;
+    }
+    .info-label {
+        min-width: 0;
+        text-align: left;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    .info-value {
+        font-size: 13px;
+    }
+
+    /* Effects */
+    .effect-row {
+        flex-wrap: wrap;
+        gap: 8px 12px;
+    }
+    .effect-row label {
+        min-width: 100%;
+        font-size: 12px;
+    }
+    .effect-slider {
+        flex: 1;
+        height: 8px;
+    }
+    .effect-slider::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+    }
+    .effect-value {
+        min-width: 48px;
+    }
+
+    /* Equalizer: horizontal scroll */
+    .equalizer-container {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+    .eq-bands {
+        gap: 12px;
+        flex-shrink: 0;
+        justify-content: flex-start;
+    }
+    .eq-band {
+        flex-shrink: 0;
+    }
+    .eq-slider.vertical {
+        height: 110px;
+        width: 8px;
+    }
+
+    /* Track sync */
+    .sync-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .sync-row label {
+        flex: 1 1 100%;
+    }
+    .sync-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    .sync-value-input {
+        width: 100px;
+        padding: 10px 8px;
+        font-size: 15px;
+    }
+
+    /* Time input */
+    .time-input {
+        width: 64px;
+        padding: 10px 8px;
+        font-size: 18px;
+    }
+
+    /* Preferences: stack sidebar */
+    .pref-layout {
+        flex-direction: column;
+        gap: 12px;
+        min-height: 0;
+    }
+    .pref-sidebar {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+    }
+    .pref-category {
+        flex-shrink: 0;
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+        padding: 10px 16px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    .pref-row {
+        flex-wrap: wrap;
+    }
+    .pref-row label {
+        flex: 1 1 100%;
+        font-size: 13px;
+    }
+
+    /* Hotkeys */
+    .hotkey-row {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    /* About */
+    .about-body {
+        padding: 24px 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .dialog-btn {
+        min-width: 0;
+        flex: 1 1 100%;
+    }
+    .dialog-footer {
+        flex-direction: column-reverse;
+    }
+    .dialog-tab {
+        padding: 10px 12px;
+    }
+    .eq-slider.vertical {
+        height: 90px;
+    }
+}
